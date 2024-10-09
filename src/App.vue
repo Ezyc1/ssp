@@ -1,38 +1,24 @@
 <script setup>
   import { ref } from 'vue';
 import KnappRad from './components/knappRad.vue';
+import ResultatRad from './components/ResultatRad.vue';
 
   const score = ref({ spelare:0, dator:0});
-  const resultat = ref('Nu kör vi!');
-  const knappar = ref(['Sten', 'Sax', 'Påse', 'Lizard', 'Spock']);
-  
+  const knappar = ref(['Sten', 'Sax', 'Påse']);
+  const resultat = ref ({});
 
 
-function hittaVinnare() {
-  let buttons = document.getElementsByClassName('alternativ')
-  for (let b of buttons) {
-    if (b.classList.contains('spelarval')) {
-      var spelarval = b.textContent
-    }
-    if (b.classList.contains('datorval')){
-      var datorval = b.textContent
-    }
-  }
-  if (spelarval == datorval) {
-    resultat.value = "Oavgjort!"
-  } else if (spelarval == 'Sten' && datorval == 'Sax' ||
-             spelarval == 'Sax' && datorval == 'Påse' ||
-             spelarval == 'Påse' && datorval == 'Sten') {
-    resultat.value = 'Du vann!'
-    score.value.spelare++
-  }else{
-    resultat.value = 'Du förlorade!'
-    score.value.dator++
-  }
+function hittaVinnare(valdaKnappar) {
+  console.log("valdaKnappar" , valdaKnappar)
+  let spelare = knappar.value.indexOf(valdaKnappar.spelare)
+  let dator = knappar.value.indexOf(valdaKnappar.dator)
+  resultat.value = { spelare: spelare, dator: dator}
+ 
 }
 function reset(){
   score.value.spelare = 0
   score.value.dator = 0
+  resultat.value = "Let's begin"
   let buttons = document.getElementsByClassName('alternativ')
   for (let b of buttons) {
     b.classList.remove('spelarval')
@@ -49,9 +35,7 @@ function reset(){
 
   <main>
     <KnappRad :knappar="knappar" @valdaKnappar="hittaVinnare"/>
-    <div class="resultat">
-      <p id="resultat">{{ resultat }}</p>
-    </div>
+    <ResultatRad :valda-Knappar="resultat" @vinnare="raknaPoang" />
     <div class="score">
       <p>
         <span id="spelare">{{ score.spelare }}</span> - 
