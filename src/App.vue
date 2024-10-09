@@ -4,6 +4,7 @@ import KnappRad from './components/knappRad.vue';
 
   const score = ref({ spelare:0, dator:0});
   const resultat = ref('Nu kör vi!');
+  const knappar = ref(['Sten', 'Sax', 'Påse', 'Lizard', 'Spock']);
   
 
 
@@ -20,8 +21,8 @@ function hittaVinnare() {
   if (spelarval == datorval) {
     resultat.value = "Oavgjort!"
   } else if (spelarval == 'Sten' && datorval == 'Sax' ||
-    spelarval == 'Sax' && datorval == 'Påse' ||
-    spelarval == 'Påse' && datorval == 'Sten') {
+             spelarval == 'Sax' && datorval == 'Påse' ||
+             spelarval == 'Påse' && datorval == 'Sten') {
     resultat.value = 'Du vann!'
     score.value.spelare++
   }else{
@@ -35,7 +36,7 @@ function reset(){
   let buttons = document.getElementsByClassName('alternativ')
   for (let b of buttons) {
     b.classList.remove('spelarval')
-    b.classList.remove('datorrval')
+    b.classList.remove('datorval')
     b.classList.remove('resultat')
   }
 }
@@ -47,7 +48,7 @@ function reset(){
   </header>
 
   <main>
-    <KnappRad/>
+    <KnappRad :knappar="knappar" @valdaKnappar="hittaVinnare"/>
     <div class="resultat">
       <p id="resultat">{{ resultat }}</p>
     </div>
